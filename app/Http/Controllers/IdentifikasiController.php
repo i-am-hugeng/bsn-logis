@@ -29,7 +29,7 @@ class IdentifikasiController extends Controller
             $data = DB::table('revision_decrees')
             ->Join('users','revision_decrees.pic','=','users.name')
             ->join('old_standards','revision_decrees.id','=','old_standards.id_sk_revisi')
-            ->join('meeting_materials','old_standards.nmr_sni_lama','=','meeting_materials.nmr_sni_lama')
+            ->leftJoin('meeting_materials','old_standards.nmr_sni_lama','=','meeting_materials.nmr_sni_lama')
             ->leftJoin('identifications','revision_decrees.id','=','identifications.id_sk_revisi')
             ->select('revision_decrees.id as id_sk_revisi', 'users.id','revision_decrees.nmr_sk_sni','revision_decrees.tanggal_sk',
             'revision_decrees.created_at','identifications.updated_at','revision_decrees.status_proses_pic',

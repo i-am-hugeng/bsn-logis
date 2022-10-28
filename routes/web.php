@@ -8,6 +8,7 @@ use App\Http\Controllers\IdentifikasiController;
 use App\Http\Controllers\JadwalRapatController;
 use App\Http\Controllers\RapatPembahasanController;
 use App\Http\Controllers\NotaDinasController;
+use App\Http\Controllers\NotifikasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/', function () {
     return redirect('/dashboard');
 });
+Route::get('/notifikasi', [NotifikasiController::class, 'index']);
 Route::get('/dashboard', [DashboardController::class, 'index']);
 // Route::get('/dashboard/test', [DashboardController::class, 'test']);
 Route::get('/dashboard/masa-transisi-sni-dt', [DashboardController::class, 'masaTransisiSNI']);

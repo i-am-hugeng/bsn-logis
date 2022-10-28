@@ -226,8 +226,8 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th class="text-center">Nomor SNI Baru</th>
-                                    <th class="text-center">Nomor SNI Lama</th>
+                                    <th class="text-center">SNI Baru</th>
+                                    <th class="text-center">SNI Lama</th>
                                     <th class="text-center">Komite Teknis</th>
                                     <th class="text-center">Sekretariat Komtek</th>
                                     <th class="text-center">Penerap</th>
@@ -552,8 +552,8 @@
                             $('#tabel-sni-lama-detail').append(
                                 '<tr>\
                                     <td class="text-center align-text-top">'+(key+1)+'</td>\
-                                    <td class="align-text-top" style="width:15%">'+item.nmr_sni_baru+'</td>\
-                                    <td class="align-text-top" style="width:15%">'+item.nmr_sni_lama+'</td>\
+                                    <td class="align-text-top" style="width:25%">'+item.nmr_sni_baru+' '+item.jdl_sni_baru+'</td>\
+                                    <td class="align-text-top" style="width:25%">'+item.nmr_sni_lama+' '+item.jdl_sni_lama+'</td>\
                                     <td class="align-text-top">'+item.komtek+'</td>\
                                     <td class="align-text-top">'+item.sekretariat_komtek+'</td>\
                                     <td class="align-text-top">'+item.penerap+'</td>\

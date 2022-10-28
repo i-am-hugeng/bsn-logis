@@ -28,8 +28,8 @@ class RapatPembahasanController extends Controller
     {
         if($request->ajax())
         {
-            $data = DB::table('meeting_Schedules')
-            ->join('meeting_materials','meeting_Schedules.id','=','meeting_materials.id_meeting_schedule')
+            $data = DB::table('meeting_schedules')
+            ->join('meeting_materials','meeting_schedules.id','=','meeting_materials.id_meeting_schedule')
             ->select('meeting_schedules.id','meeting_schedules.pic_rapat','meeting_schedules.tanggal_rapat',
             'meeting_schedules.status_pembahasan')
             ->selectRaw('COUNT(DISTINCT(meeting_materials.nmr_sni_lama)) AS jumlah_sni')

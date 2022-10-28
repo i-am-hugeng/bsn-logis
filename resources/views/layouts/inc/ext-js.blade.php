@@ -48,5 +48,14 @@
                 title: "Tidak memiliki hak akses.",
             });
         })
+
+        $.ajax({
+            type: "GET",
+            url: "/notifikasi",
+            dataType: "JSON",
+            success: function (response) {
+                $('.notifikasi').html(response.notifikasi);
+            }
+        });
     });
 </script>

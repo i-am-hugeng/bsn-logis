@@ -145,8 +145,9 @@ class JadwalRapatController extends Controller
         ->join('revision_decrees','old_standards.id_sk_revisi','=','revision_decrees.id')
         ->join('identifications','revision_decrees.id','=','identifications.id_sk_revisi')
         ->join('standard_implementers','identifications.id','=','standard_implementers.id_identifikasi')
-        ->select('meeting_materials.id','meeting_materials.nmr_sni_lama','identifications.komtek',
-        'identifications.sekretariat_komtek','standard_implementers.penerap','revision_decrees.nmr_sni_baru')
+        ->select('revision_decrees.nmr_sni_baru','revision_decrees.jdl_sni_baru','meeting_materials.id',
+        'meeting_materials.nmr_sni_lama','meeting_materials.jdl_sni_lama','identifications.komtek',
+        'identifications.sekretariat_komtek','standard_implementers.penerap')
         ->where('id_meeting_schedule','=',$id)
         ->get();
 
@@ -184,7 +185,6 @@ class JadwalRapatController extends Controller
 
         // dd($status_bahan_rapat);
 
-         
         foreach($status_bahan_rapat as $item) {
             RevisionDecree::where('id','=',$item->id)
             ->update([

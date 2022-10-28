@@ -428,10 +428,13 @@
                                                 <p class="inline">Jumlah penerap : <a href="javascript:void(0)" class="lihat-penerap" id="'+item.id+'">'+item.jumlah_penerap+'<a/></p>\
                                             </td>\
                                             <td>\
-                                                <select id="'+item.id+'" class="status form-control mb-3" name="status_sni_lama['+item.id+']">\
-                                                    <option value="0">pencabutan</option>\
-                                                    <option value="1">Transisi</option>\
-                                                </select>\
+                                                <div class="form-group">\
+                                                    <select id="'+item.id+'" class="status form-control mb-3" name="status_sni_lama['+item.id+']">\
+                                                        <option value="" selected>--Status--</option>\
+                                                        <option value="0">Pencabutan</option>\
+                                                        <option value="1">Transisi</option>\
+                                                    </select>\
+                                                </div>\
                                             </td>\
                                             <td>\
                                                 <textarea rows="5" id="'+item.id+'" name="catatan['+item.id+']" class="form-control reset-value" placeholder="Masukkan catatan bila diperlukan..."></textarea>\
@@ -576,10 +579,13 @@
                                                                         <p class="inline">Jumlah penerap : <a href="javascript:void(0)" class="lihat-penerap" id="'+item.id+'">'+item.jumlah_penerap+'<a/></p>\
                                                                     </td>\
                                                                     <td>\
-                                                                        <select id="'+item.id+'" class="status form-control mb-3" name="status_sni_lama['+item.id+']">\
-                                                                            <option value="0">pencabutan</option>\
-                                                                            <option value="1">Transisi</option>\
-                                                                        </select>\
+                                                                        <div class="form-group">\
+                                                                            <select id="'+item.id+'" class="status form-control mb-3" name="status_sni_lama['+item.id+']">\
+                                                                                <option value="" selected>--Status--</option>\
+                                                                                <option value="0">Pencabutan</option>\
+                                                                                <option value="1">Transisi</option>\
+                                                                            </select>\
+                                                                        </div>\
                                                                     </td>\
                                                                 </tr>'
                                                             );
@@ -628,7 +634,6 @@
                                 /************* Simpan Pembahasan **************/
                                 /**********************************************/
                                 $('#form-bahas-masa-transisi').on('click', '#tombol-simpan-pembahasan', function(e) {
-                                    
                                     if($('.batas_transisi').length > 0) {
                                         $('.batas_transisi').each(function() {
                                             if($(this).val() == 0) {
@@ -640,63 +645,87 @@
                                             }
                                         });
                                     }
-                                    $('#form-bahas-masa-transisi').validate({
-                                        submitHandler: function(form) {
-                                            Swal.fire({
-                                                title: 'Anda yakin untuk simpan data rapat pembahasan?',
-                                                showDenyButton: false,
-                                                showCancelButton: true,
-                                                confirmButtonText: 'Simpan',
-                                                cancelButtonText: 'Batal',
-                                                customClass: {
-                                                    actions: 'my-actions',
-                                                    cancelButton: 'order-1 right-gap',
-                                                    confirmButton: 'order-2',
-                                                    denyButton: 'order-3',
-                                                }
-                                            }).then((result) => {
-                                                if(result.isConfirmed) {
-                                                    $.ajaxSetup({
-                                                        headers: {
-                                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    else {
+                                        $('#form-bahas-masa-transisi').on('submit', function(e) {
+                                            $('.status').each(function() {
+                                                $(this).rules('add',
+                                                    {
+                                                        required: true,
+                                                        messages: {
+                                                            required: "Pilih status SNI lama.",
                                                         }
-                                                    });
-
-                                                    $('#tombol-simpan-pembahasan').html('<i class="spinner-border spinner-border-sm text-light" role="status"></i> Menyimpan...');
-                                                    $('#tombol-simpan-pembahasan').attr('disabled', true);
-
-                                                    $.ajax({
-                                                        type        : "POST",
-                                                        dataType    : "JSON",
-                                                        url         : "/rapat-pembahasan/simpan-data-pembahasan",
-                                                        contentType : false,
-                                                        processData : false,
-                                                        cache       : false,
-                                                        data        : new FormData($(form)[0]),
-                                                        success: function(response) {
-                                                            Toast.fire({
-                                                                icon : "success",
-                                                                title: "Masa Transisi SNI telah ditetapkan.",
-                                                            });                     
-                                                        },
-                                                        error: function(response) {
-                                                            Toast.fire({
-                                                                icon : "error",
-                                                                title: "Gagal menyimpan data pembahasan.",
-                                                            });
-                                                        },
-                                                        complete: function(response) {
-                                                            $('#papan-pembahasan').html('');
-                                                            $('#counter').val(0);
-                                                            $('#tombol-simpan-pembahasan').text('Simpan');
-                                                            $('#tombol-simpan-pembahasan').attr('disabled', false);
-                                                            $('#aksi-pembahasan-dt').DataTable().ajax.reload();
-                                                        }
-                                                    });
-                                                }
+                                                    }
+                                                )
                                             })
-                                        }
-                                    });
+                                        }).validate({
+                                            errorElement: 'span',
+                                            errorPlacement: function (error, element) {
+                                                error.addClass('invalid-feedback');
+                                                element.closest('.form-group').append(error);
+                                            },
+                                            highlight: function (element, errorClass, validClass) {
+                                                $(element).addClass('is-invalid');
+                                            },
+                                            unhighlight: function (element, errorClass, validClass) {
+                                                $(element).removeClass('is-invalid');
+                                            },
+                                            submitHandler: function(form) {
+                                                Swal.fire({
+                                                    title: 'Anda yakin untuk simpan data rapat pembahasan?',
+                                                    showDenyButton: false,
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Simpan',
+                                                    cancelButtonText: 'Batal',
+                                                    customClass: {
+                                                        actions: 'my-actions',
+                                                        cancelButton: 'order-1 right-gap',
+                                                        confirmButton: 'order-2',
+                                                        denyButton: 'order-3',
+                                                    }
+                                                }).then((result) => {
+                                                    if(result.isConfirmed) {
+                                                        $.ajaxSetup({
+                                                            headers: {
+                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                            }
+                                                        });
+
+                                                        $('#tombol-simpan-pembahasan').html('<i class="spinner-border spinner-border-sm text-light" role="status"></i> Menyimpan...');
+                                                        $('#tombol-simpan-pembahasan').attr('disabled', true);
+
+                                                        $.ajax({
+                                                            type        : "POST",
+                                                            dataType    : "JSON",
+                                                            url         : "/rapat-pembahasan/simpan-data-pembahasan",
+                                                            contentType : false,
+                                                            processData : false,
+                                                            cache       : false,
+                                                            data        : new FormData($(form)[0]),
+                                                            success: function(response) {
+                                                                Toast.fire({
+                                                                    icon : "success",
+                                                                    title: "Masa Transisi SNI telah ditetapkan.",
+                                                                });                     
+                                                            },
+                                                            error: function(response) {
+                                                                Toast.fire({
+                                                                    icon : "error",
+                                                                    title: "Gagal menyimpan data pembahasan.",
+                                                                });
+                                                            },
+                                                            complete: function(response) {
+                                                                $('#papan-pembahasan').html('');
+                                                                $('#counter').val(0);
+                                                                $('#tombol-simpan-pembahasan').text('Simpan');
+                                                                $('#tombol-simpan-pembahasan').attr('disabled', false);
+                                                                $('#aksi-pembahasan-dt').DataTable().ajax.reload();
+                                                            }
+                                                        });
+                                                    }
+                                                })
+                                            }
+                                        });;
+                                    }
                                 });
                             }
                         });

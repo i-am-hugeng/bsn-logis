@@ -618,6 +618,17 @@
                 })
 
                 /******** Tambah Data identifikasi SNI *********/
+                function notifikasi() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/notifikasi",
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('.notifikasi').html(response.notifikasi);
+                        }
+                    });
+                }
+
                 $('#tambah-data-identifikasi').off('click').on('click', function(e) {
 
                     if($('#sifat_sni').val() == 1) {
@@ -701,6 +712,8 @@
                                             });
                                         },
                                         complete: function(response) {
+                                            $('.notifikasi').html('');
+                                            notifikasi();
                                             $('#modal-identifikasi-edit').modal('hide');
                                             $('#form-identifikasi-edit').find('input').val('');
                                             $('#form-identifikasi-edit').find('textarea').val('');
@@ -759,6 +772,8 @@
                                         });
                                     },
                                     complete: function(response) {
+                                        $('.notifikasi').html('');
+                                        notifikasi();
                                         $('#modal-identifikasi-edit').modal('hide');
                                         $('#form-identifikasi-edit').find('input').val('');
                                         $('#form-identifikasi-edit').find('textarea').val('');
