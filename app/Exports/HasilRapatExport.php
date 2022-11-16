@@ -43,6 +43,7 @@ class HasilRapatExport implements WithHeadings, ShouldAutoSize, WithStyles
         ->join('standard_implementers','identifications.id','=','standard_implementers.id_identifikasi')
         ->leftJoin('transition_times','meeting_materials.id','transition_times.id_sni_lama')
         ->select('meeting_materials.nmr_sni_lama')
+        ->groupBy('meeting_materials.nmr_sni_lama')
         ->where('meeting_materials.id_meeting_schedule','=',$this->id)
         ->get();
 
@@ -66,6 +67,7 @@ class HasilRapatExport implements WithHeadings, ShouldAutoSize, WithStyles
         ->select('revision_decrees.nmr_sni_baru','revision_decrees.jdl_sni_baru',
         'meeting_materials.nmr_sni_lama','meeting_materials.jdl_sni_lama','identifications.komtek',
         'meeting_materials.status_sni_lama','transition_times.batas_transisi','meeting_materials.catatan')
+        ->groupBy('meeting_materials.nmr_sni_lama')
         ->where('meeting_schedules.id','=',$this->id)
         ->get();
 
@@ -83,7 +85,7 @@ class HasilRapatExport implements WithHeadings, ShouldAutoSize, WithStyles
                 $sheet->setCellValue('D'.$i,'Transisi');
             }
             $sheet->setCellValue('E'.$i, $data->batas_transisi);
-            $sheet->setCellValue('F'.$i, $data->catatan);
+            $sheet->setCellValue('F'.$i, $data->catatan = str_replace('<br />','', $data->catatan));
             $i += 1;
         }
 

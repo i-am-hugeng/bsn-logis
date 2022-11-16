@@ -435,6 +435,9 @@
                                                         <option value="1">Transisi</option>\
                                                     </select>\
                                                 </div>\
+                                                <div class="form-group">\
+                                                    <input type="text" class="form-control hidden-transisi" name="batas_transisi['+item.id+']" placeholder="pilih batas waktu..." hidden>\
+                                                </div>\
                                             </td>\
                                             <td>\
                                                 <textarea rows="5" id="'+item.id+'" name="catatan['+item.id+']" class="form-control reset-value" placeholder="Masukkan catatan bila diperlukan..."></textarea>\
@@ -444,14 +447,11 @@
                                 });
 
                                 $('.status').on('change',function() {
-                                    var counter = $(this).attr('id');
-
+                                    var input_transisi = $(this).parent().siblings().children('.hidden-transisi');
                                     if($(this).val() == 1) {
-                                        $(this).closest('td').append(
-                                            '<input type="text" class="form-control batas_transisi" name="batas_transisi['+counter+']" placeholder="pilih batas waktu..." readonly>'
-                                        )
-
-                                        counter += 1;
+                                        input_transisi.prop('hidden', false);
+                                        input_transisi.prop('readonly', true);
+                                        input_transisi.addClass('batas_transisi');
 
                                         $(".batas_transisi").datepicker({
                                             todayBtn   :'linked',
@@ -462,11 +462,13 @@
                                             autoclose  : true,
                                             minDate: '0',
                                         });
-
                                     }
                                     else {
-                                        $(this).siblings('.batas_transisi').remove();
-                                        counter -= 1;
+                                        input_transisi.prop('hidden', true);
+                                        input_transisi.prop('readonly', false);
+                                        input_transisi.removeClass('batas_transisi');
+                                        input_transisi.html('');
+                                        // counter -= 1;
                                     }
                                 });
 
@@ -586,20 +588,23 @@
                                                                                 <option value="1">Transisi</option>\
                                                                             </select>\
                                                                         </div>\
+                                                                        <div class="form-group">\
+                                                                            <input type="text" class="form-control" name="batas_transisi['+item.id+']" placeholder="pilih batas waktu..." hidden>\
+                                                                        </div>\
+                                                                    </td>\
+                                                                    <td>\
+                                                                        <textarea rows="5" id="'+item.id+'" name="catatan['+item.id+']" class="form-control reset-value" placeholder="Masukkan catatan bila diperlukan..."></textarea>\
                                                                     </td>\
                                                                 </tr>'
                                                             );
                                                         });
 
                                                         $('.status').on('change',function() {
-                                                            var counter = $(this).attr('id');
-
+                                                            var input_transisi = $(this).parent().siblings().children('.hidden-transisi');
                                                             if($(this).val() == 1) {
-                                                                $(this).closest('td').append(
-                                                                    '<input type="text" class="form-control batas_transisi" name="batas_transisi['+counter+']" placeholder="pilih batas waktu..." readonly>'
-                                                                )
-
-                                                                counter += 1;
+                                                                input_transisi.prop('hidden', false);
+                                                                input_transisi.prop('readonly', true);
+                                                                input_transisi.addClass('batas_transisi');
 
                                                                 $(".batas_transisi").datepicker({
                                                                     todayBtn   :'linked',
@@ -610,11 +615,13 @@
                                                                     autoclose  : true,
                                                                     minDate: '0',
                                                                 });
-
                                                             }
                                                             else {
-                                                                $(this).siblings('.batas_transisi').remove();
-                                                                counter -= 1;
+                                                                input_transisi.prop('hidden', true);
+                                                                input_transisi.prop('readonly', false);
+                                                                input_transisi.removeClass('batas_transisi');
+                                                                input_transisi.html('');
+                                                                // counter -= 1;
                                                             }
                                                         });
 
@@ -633,7 +640,8 @@
                                 /**********************************************/
                                 /************* Simpan Pembahasan **************/
                                 /**********************************************/
-                                $('#form-bahas-masa-transisi').on('click', '#tombol-simpan-pembahasan', function(e) {
+                                $('#form-bahas-masa-transisi').on('click','#tombol-simpan-pembahasan', function(e) {
+                                            
                                     if($('.batas_transisi').length > 0) {
                                         $('.batas_transisi').each(function() {
                                             if($(this).val() == 0) {
@@ -645,88 +653,85 @@
                                             }
                                         });
                                     }
-                                    else {
-                                        $('#form-bahas-masa-transisi').on('submit', function(e) {
-                                            $('.status').each(function() {
-                                                $(this).rules('add',
-                                                    {
-                                                        required: true,
-                                                        messages: {
-                                                            required: "Pilih status SNI lama.",
-                                                        }
-                                                    }
-                                                )
-                                            })
-                                        }).validate({
-                                            errorElement: 'span',
-                                            errorPlacement: function (error, element) {
-                                                error.addClass('invalid-feedback');
-                                                element.closest('.form-group').append(error);
-                                            },
-                                            highlight: function (element, errorClass, validClass) {
-                                                $(element).addClass('is-invalid');
-                                            },
-                                            unhighlight: function (element, errorClass, validClass) {
-                                                $(element).removeClass('is-invalid');
-                                            },
-                                            submitHandler: function(form) {
-                                                Swal.fire({
-                                                    title: 'Anda yakin untuk simpan data rapat pembahasan?',
-                                                    showDenyButton: false,
-                                                    showCancelButton: true,
-                                                    confirmButtonText: 'Simpan',
-                                                    cancelButtonText: 'Batal',
-                                                    customClass: {
-                                                        actions: 'my-actions',
-                                                        cancelButton: 'order-1 right-gap',
-                                                        confirmButton: 'order-2',
-                                                        denyButton: 'order-3',
-                                                    }
-                                                }).then((result) => {
-                                                    if(result.isConfirmed) {
-                                                        $.ajaxSetup({
-                                                            headers: {
-                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                            }
-                                                        });
 
-                                                        $('#tombol-simpan-pembahasan').html('<i class="spinner-border spinner-border-sm text-light" role="status"></i> Menyimpan...');
-                                                        $('#tombol-simpan-pembahasan').attr('disabled', true);
-
-                                                        $.ajax({
-                                                            type        : "POST",
-                                                            dataType    : "JSON",
-                                                            url         : "/rapat-pembahasan/simpan-data-pembahasan",
-                                                            contentType : false,
-                                                            processData : false,
-                                                            cache       : false,
-                                                            data        : new FormData($(form)[0]),
-                                                            success: function(response) {
-                                                                Toast.fire({
-                                                                    icon : "success",
-                                                                    title: "Masa Transisi SNI telah ditetapkan.",
-                                                                });                     
-                                                            },
-                                                            error: function(response) {
-                                                                Toast.fire({
-                                                                    icon : "error",
-                                                                    title: "Gagal menyimpan data pembahasan.",
-                                                                });
-                                                            },
-                                                            complete: function(response) {
-                                                                $('#papan-pembahasan').html('');
-                                                                $('#counter').val(0);
-                                                                $('#tombol-simpan-pembahasan').text('Simpan');
-                                                                $('#tombol-simpan-pembahasan').attr('disabled', false);
-                                                                $('#aksi-pembahasan-dt').DataTable().ajax.reload();
-                                                            }
-                                                        });
-                                                    }
-                                                })
+                                    $('.status').each(function() {
+                                        $(this).rules('add',
+                                            {
+                                                required: true,
+                                                messages: {
+                                                    required: "Pilih status SNI lama.",
+                                                }
                                             }
-                                        });;
+                                        );
+                                    });
+                                }).validate({
+                                    errorElement: 'span',
+                                    errorPlacement: function (error, element) {
+                                        error.addClass('invalid-feedback');
+                                        element.closest('.form-group').append(error);
+                                    },
+                                    highlight: function (element, errorClass, validClass) {
+                                        $(element).addClass('is-invalid');
+                                    },
+                                    unhighlight: function (element, errorClass, validClass) {
+                                        $(element).removeClass('is-invalid');
+                                    },
+                                    submitHandler: function(form) {
+                                        Swal.fire({
+                                            title: 'Anda yakin untuk simpan data rapat pembahasan?',
+                                            showDenyButton: false,
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Simpan',
+                                            cancelButtonText: 'Batal',
+                                            customClass: {
+                                                actions: 'my-actions',
+                                                cancelButton: 'order-1 right-gap',
+                                                confirmButton: 'order-2',
+                                                denyButton: 'order-3',
+                                            }
+                                        }).then((result) => {
+                                            if(result.isConfirmed) {
+                                                $.ajaxSetup({
+                                                    headers: {
+                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                    }
+                                                });
+
+                                                $('#tombol-simpan-pembahasan').html('<i class="spinner-border spinner-border-sm text-light" role="status"></i> Menyimpan...');
+                                                $('#tombol-simpan-pembahasan').attr('disabled', true);
+
+                                                $.ajax({
+                                                    type        : "POST",
+                                                    dataType    : "JSON",
+                                                    url         : "/rapat-pembahasan/simpan-data-pembahasan",
+                                                    contentType : false,
+                                                    processData : false,
+                                                    cache       : false,
+                                                    data        : new FormData($(form)[0]),
+                                                    success: function(response) {
+                                                        Toast.fire({
+                                                            icon : "success",
+                                                            title: "Masa Transisi SNI telah ditetapkan.",
+                                                        });                     
+                                                    },
+                                                    error: function(response) {
+                                                        Toast.fire({
+                                                            icon : "error",
+                                                            title: "Gagal menyimpan data pembahasan.",
+                                                        });
+                                                    },
+                                                    complete: function(response) {
+                                                        $('#papan-pembahasan').html('');
+                                                        $('#counter').val(0);
+                                                        $('#tombol-simpan-pembahasan').text('Simpan');
+                                                        $('#tombol-simpan-pembahasan').attr('disabled', false);
+                                                        $('#aksi-pembahasan-dt').DataTable().ajax.reload();
+                                                    }
+                                                });
+                                            }
+                                        })
                                     }
-                                });
+                                });;
                             }
                         });
                     }

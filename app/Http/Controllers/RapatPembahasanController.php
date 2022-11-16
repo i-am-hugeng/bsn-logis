@@ -57,6 +57,7 @@ class RapatPembahasanController extends Controller
         'meeting_materials.nmr_sni_lama','meeting_materials.jdl_sni_lama',
         'identifications.komtek','meeting_materials.status_sni_lama',
         'transition_times.batas_transisi','meeting_materials.catatan')
+        ->groupBy('meeting_materials.nmr_sni_lama')
         ->where('meeting_schedules.id','=',$id)
         ->get();
 
@@ -135,7 +136,7 @@ class RapatPembahasanController extends Controller
         ->select('meeting_materials.id','revision_decrees.nmr_sni_baru','revision_decrees.jdl_sni_baru','meeting_materials.nmr_sni_lama',
         'meeting_materials.jdl_sni_lama','identifications.komtek')
         ->selectRaw('COUNT(CASE WHEN (standard_implementers.penerap = "-") THEN NULL ELSE 1 END) AS jumlah_penerap')
-        ->groupBy('nmr_sni_lama')
+        ->groupBy('meeting_materials.nmr_sni_lama')
         ->where('meeting_schedules.id','=',$id)
         ->get();
 
@@ -187,7 +188,7 @@ class RapatPembahasanController extends Controller
             MeetingMaterial::where('id',$data['id_sni_lama'][$item])
             ->update([
                 'status_sni_lama'   => $data['status_sni_lama'][$item],
-                'catatan'           => $data['catatan'][$item],
+                'catatan'           => nl2br($data['catatan'][$item]),
             ]);
 
             //simpan batas waktu masa transisi SNI lama
